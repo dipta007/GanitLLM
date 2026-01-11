@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="GanitLLM: Difficulty-Aware Bengali Mathematical Reasoning through Curriculum-GRPO">
+  <meta name="description" content="We present GanitLLM, the first Bengali mathematical reasoning model with native Bengali reasoning. Our Curriculum-GRPO approach improves accuracy by +8 points while achieving 88% Bengali reasoning.">
+  <meta name="keywords" content="Bengali, mathematical reasoning, LLM, GRPO, curriculum learning, low-resource language, NLP, deep learning">
+  <meta name="author" content="Shubhashis Roy Dipta, Khairul Mahbub, Nadia Najjar">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="GanitLLM">
+  <meta property="og:title" content="GanitLLM: Difficulty-Aware Bengali Mathematical Reasoning through Curriculum-GRPO">
+  <meta property="og:description" content="We present GanitLLM, the first Bengali mathematical reasoning model with native Bengali reasoning. Our Curriculum-GRPO approach improves accuracy by +8 points while achieving 88% Bengali reasoning.">
+  <meta property="og:url" content="https://dipta007.github.io/GanitLLM">
+  <meta property="og:image" content="https://dipta007.github.io/GanitLLM/static/images/social_preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="GanitLLM - Bengali Mathematical Reasoning">
+  <meta property="article:published_time" content="2025-01-01T00:00:00.000Z">
+  <meta property="article:author" content="Shubhashis Roy Dipta">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="Bengali">
+  <meta property="article:tag" content="Mathematical Reasoning">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@iamdipta007">
+  <meta name="twitter:creator" content="@iamdipta007">
+  <meta name="twitter:title" content="GanitLLM: Bengali Mathematical Reasoning through Curriculum-GRPO">
+  <meta name="twitter:description" content="First Bengali math reasoning model with native Bengali reasoning. +8 accuracy, 88% Bengali tokens, 79% fewer words.">
+  <meta property="twitter:image" content="https://dipta007.github.io/GanitLLM/static/images/social_preview.png">
+  <meta name="twitter:image:alt" content="GanitLLM - Bengali Mathematical Reasoning">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="GanitLLM: Difficulty-Aware Bengali Mathematical Reasoning through Curriculum-GRPO">
+  <meta name="citation_author" content="Dipta, Shubhashis Roy">
+  <meta name="citation_author" content="Mahbub, Khairul">
+  <meta name="citation_author" content="Najjar, Nadia">
+  <meta name="citation_publication_date" content="2025">
+  <meta name="citation_conference_title" content="Arxiv">
+  <meta name="citation_pdf_url" content="https://arxiv.org/">
+
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#10b981">
+  <meta name="msapplication-TileColor" content="#10b981">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <title>GanitLLM: Bengali Mathematical Reasoning through Curriculum-GRPO</title>
+
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link rel="apple-touch-icon" href="static/images/favicon.ico">
+
+  <!-- Critical CSS - Load synchronously -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <!-- Non-critical CSS - Load asynchronously -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <!-- Fallback for browsers that don't support preload -->
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+
+  <!-- Fonts - Optimized loading -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Defer non-critical JavaScript -->
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+
+  <!-- Structured Data for Academic Papers -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "GanitLLM: Difficulty-Aware Bengali Mathematical Reasoning through Curriculum-GRPO",
+    "description": "We present GanitLLM, a Bengali mathematical reasoning model with a new difficulty-aware Bengali math corpus and curriculum-based GRPO pipeline.",
+    "author": [
+      {
+        "@type": "Person",
+        "name": "Shubhashis Roy Dipta",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "University of Maryland, Baltimore County"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Khairul Mahbub",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "University of North Carolina at Charlotte"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Nadia Najjar",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "University of North Carolina at Charlotte"
+        }
+      }
+    ],
+    "datePublished": "2025",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Association for Computational Linguistics"
+    },
+    "url": "https://dipta007.github.io/GanitLLM",
+    "keywords": ["Bengali", "Mathematical Reasoning", "LLM", "GRPO", "Curriculum Learning"],
+    "isAccessibleForFree": true
+  }
+  </script>
+
+  <style>
+    .bengali-text {
+      font-family: 'Noto Sans Bengali', sans-serif;
+    }
+    .highlight-box {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin: 1rem 0;
+    }
+    .stat-card {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      border: 1px solid #e2e8f0;
+      height: 100%;
+    }
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #10b981;
+    }
+    .stat-label {
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+    @media screen and (max-width: 768px) {
+      .stat-card {
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+      }
+      .stat-number {
+        font-size: 1.8rem;
+      }
+      .stat-label {
+        font-size: 0.8rem;
+      }
+    }
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      min-width: 500px;
+    }
+    .comparison-table th, .comparison-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+      white-space: nowrap;
+    }
+    .comparison-table th {
+      background: #f1f5f9;
+      font-weight: 600;
+    }
+    .comparison-table tr:hover {
+      background: #f8fafc;
+    }
+    .comparison-table a {
+      color: #2563eb;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .comparison-table a:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+    @media screen and (max-width: 768px) {
+      .comparison-table {
+        min-width: 400px;
+        font-size: 0.85rem;
+      }
+      .comparison-table th, .comparison-table td {
+        padding: 0.5rem 0.75rem;
+      }
+    }
+    .model-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .badge-green {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .badge-blue {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    .method-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .step-number {
+      background: #10b981;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .example-box {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 1.5rem;
+      border-radius: 12px;
+      font-family: monospace;
+      overflow-x: auto;
+    }
+    .example-question {
+      color: #fbbf24;
+      margin-bottom: 0.5rem;
+    }
+    .example-answer {
+      color: #34d399;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- TODO: More Works Dropdown -->
+  <!-- <div class="more-works-container"> -->
+  <!--   <button class="more-works-btn" onclick="toggleMoreWorks()" title="View More Works from Our Lab"> -->
+  <!--     <i class="fas fa-flask"></i> -->
+  <!--     More Works -->
+  <!--     <i class="fas fa-chevron-down dropdown-arrow"></i> -->
+  <!--   </button> -->
+  <!--   <div class="more-works-dropdown" id="moreWorksDropdown"> -->
+  <!--     <div class="dropdown-header"> -->
+  <!--       <h4>More Works</h4> -->
+  <!--       <button class="close-btn" onclick="toggleMoreWorks()"> -->
+  <!--         <i class="fas fa-times"></i> -->
+  <!--       </button> -->
+  <!--     </div> -->
+  <!--     <div class="works-list"> -->
+  <!--       <a href="https://dipta007.github.io/Q2E/" class="work-item" target="_blank"> -->
+  <!--         <div class="work-info"> -->
+  <!--           <h5>Query-to-Event Decomposition for Zero-Shot Multilingual Text-to-Video Retrieval</h5> -->
+  <!--           <span class="work-venue">AACL 2025 (main track)</span> -->
+  <!--         </div> -->
+  <!--         <i class="fas fa-external-link-alt"></i> -->
+  <!--       </a> -->
+  <!--       <a href="https://aclanthology.org/2025.starsem-1.20/" class="work-item" target="_blank"> -->
+  <!--         <div class="work-info"> -->
+  <!--           <h5>If We May De-Presuppose: Robustly Verifying Claims through Presupposition-Free Question Decomposition</h5> -->
+  <!--           <span class="work-venue">*SEM 2025</span> -->
+  <!--         </div> -->
+  <!--         <i class="fas fa-external-link-alt"></i> -->
+  <!--       </a> -->
+  <!--       <a href="https://aclanthology.org/2023.starsem-1.31/" class="work-item" target="_blank"> -->
+  <!--         <div class="work-info"> -->
+  <!--           <h5>Semantically-informed Hierarchical Event Modeling</h5> -->
+  <!--           <span class="work-venue">*SEM 2023</span> -->
+  <!--         </div> -->
+  <!--         <i class="fas fa-external-link-alt"></i> -->
+  <!--       </a> -->
+  <!--     </div> -->
+  <!--   </div> -->
+  <!-- </div> -->
+
+  <main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">
+                  <span class="bengali-text">গণিতLLM</span><br>GanitLLM: Difficulty-Aware Bengali Mathematical Reasoning through Curriculum-GRPO
+            </h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://roydipta.com" target="_blank">Shubhashis Roy Dipta</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=S222Ey0AAAAJ&hl=en" target="_blank">Khairul Mahbub</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://cci.charlotte.edu/directory/nadia-najjar/" target="_blank">Nadia Najjar</a><sup>2</sup>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>University of Maryland, Baltimore County</span>
+              <span class="author-block"><sup>2</sup>University of North Carolina at Charlotte</span>
+              <br>
+              <!-- <span class="author-block" style="font-weight: 600; color: #10b981;">ACL 2025</span> -->
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+
+              <span class="link-block">
+                <a href="https://github.com/dipta007/GanitLLM" target="_blank"
+                class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Code</span>
+              </a>
+            </span>
+
+            <span class="link-block">
+              <a href="https://huggingface.co/collections/dipta007/ganitllm" target="_blank"
+              class="external-link button is-normal is-rounded is-dark">
+              <span>🤗 Models</span>
+            </a>
+          </span>
+
+          <span class="link-block">
+            <a href="https://huggingface.co/datasets/dipta007/Ganit" target="_blank"
+            class="external-link button is-normal is-rounded is-dark">
+            <span class="icon">
+              <i class="fas fa-database"></i>
+            </span>
+            <span>Dataset</span>
+          </a>
+        </span>
+
+        <span class="link-block">
+          <a href="https://arxiv.org/" target="_blank"
+          class="external-link button is-normal is-rounded is-dark">
+          <span class="icon">
+            <i class="ai ai-arxiv"></i>
+          </span>
+          <span>arXiv</span>
+        </a>
+      </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- Key Results -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <h2 class="title is-3 has-text-centered">Key Results</h2>
+    <div class="container is-max-desktop">
+      <div class="columns is-multiline is-centered is-mobile">
+        <div class="column is-6-mobile is-6-tablet is-3-desktop">
+          <div class="stat-card">
+            <div class="stat-number">+8</div>
+            <div class="stat-label">Accuracy on Bn-MGSM</div>
+          </div>
+        </div>
+        <div class="column is-6-mobile is-6-tablet is-3-desktop">
+          <div class="stat-card">
+            <div class="stat-number">88%</div>
+            <div class="stat-label">Bengali Reasoning Tokens</div>
+          </div>
+        </div>
+        <div class="column is-6-mobile is-6-tablet is-3-desktop">
+          <div class="stat-card">
+            <div class="stat-number">79%</div>
+            <div class="stat-label">Fewer Generated Words</div>
+          </div>
+        </div>
+        <div class="column is-6-mobile is-6-tablet is-3-desktop">
+          <div class="stat-card">
+            <div class="stat-number">3.8x</div>
+            <div class="stat-label">Faster Convergence</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Teaser Figure -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="has-text-centered">
+        <img src="static/images/teaser.png" alt="GanitLLM Overview: Current models reason in English even for Bengali questions. Our solution combines the GANIT dataset with SFT and Curriculum-GRPO to achieve native Bengali reasoning." style="max-width: 70%; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+        <h2 class="subtitle has-text-centered" style="margin-top: 1rem;">
+          <strong>Overview:</strong> Current models reason in English even for Bengali questions (left). Our solution combines the GANIT dataset with SFT and Curriculum-GRPO (center) to achieve native Bengali reasoning with 88% Bengali tokens, 79% fewer words, and +8 accuracy (right).
+        </h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            We present a Bengali mathematical reasoning model called <strong>GanitLLM</strong> (named after the Bangla word for mathematics, <em>Ganit</em>), together with a new difficulty-aware Bengali math corpus and a curriculum-based GRPO pipeline. Bengali is one of the world's most widely spoken languages, yet existing LLMs either reason in English and then translate, or simply fail on multi-step Bengali math, in part because reinforcement learning recipes are tuned for high-resource languages and collapse under reward sparsity in low-resource settings.
+          </p>
+          <p>
+            To address this, we construct <strong>GANIT</strong>, a rigorously filtered and decontaminated Bengali math dataset with automatic difficulty tags derived from the pass@k of a strong evaluator model. Building on this dataset, we propose <strong>Curriculum-GRPO</strong>, which combines multi-stage training (SFT + GRPO) with difficulty-aware sampling and verifiable rewards for format, numerical correctness, and Bengali reasoning.
+          </p>
+          <p>
+            On Bn-MGSM and Bn-MSVAMP, <strong>GanitLLM-4B improves over its Qwen3-4B base by +8 and +7 accuracy points</strong>, respectively, while increasing the percentage of Bengali reasoning tokens from 14% to over 88% and reducing average solution length from 943 to 193 words.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Problem & Motivation -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">The Problem: English Reasoning for Bengali Questions</h2>
+    <div class="content">
+      <p class="has-text-centered" style="margin-bottom: 2rem;">
+        Current LLMs reason in English even when asked Bengali math questions, reducing interpretability for native speakers.
+      </p>
+
+      <div class="columns">
+        <div class="column">
+          <div class="example-box">
+            <div class="example-question">Bengali Question:</div>
+            <div class="bengali-text" style="font-size: 1.1rem; margin-bottom: 1rem;">
+              দুই সংখ্যার যোগফল ১২ এবং গুনফল ৩২। সংখ্যা দুইটি কি?
+            </div>
+            <div style="color: #94a3b8; margin-bottom: 0.5rem;">Base Model Reasoning (English):</div>
+            <div style="font-size: 0.9rem;">
+              Let the two numbers be x and y.<br>
+              Then, x + y = 12 and xy = 32<br>
+              From these conditions, we form the quadratic equation:<br>
+              t² - 12t + 32 = 0<br>
+              Solving this equation gives: t = 4 and t = 8
+            </div>
+            <div class="example-answer" style="margin-top: 1rem;">Answer: ৪ এবং ৮</div>
+          </div>
+          <p class="has-text-centered" style="margin-top: 0.5rem; color: #ef4444;">
+            <i class="fas fa-times-circle"></i> Only 14% Bengali tokens
+          </p>
+        </div>
+        <div class="column">
+          <div class="example-box">
+            <div class="example-question">Bengali Question:</div>
+            <div class="bengali-text" style="font-size: 1.1rem; margin-bottom: 1rem;">
+              দুই সংখ্যার যোগফল ১২ এবং গুনফল ৩২। সংখ্যা দুইটি কি?
+            </div>
+            <div style="color: #94a3b8; margin-bottom: 0.5rem;">GanitLLM Reasoning (Bengali):</div>
+            <div class="bengali-text" style="font-size: 0.9rem;">
+              ধরি সংখ্যা দুটি x এবং y<br>
+              x + y = ১২<br>
+              xy = ৩২<br>
+              দ্বিঘাত সমীকরণ পাই:<br>
+              t² - ১২t + ৩২ = 0<br>
+              সুতরাং, t = ৪ এবং t = ৮
+            </div>
+            <div class="example-answer" style="margin-top: 1rem;">Answer: ৪ এবং ৮</div>
+          </div>
+          <p class="has-text-centered" style="margin-top: 0.5rem; color: #10b981;">
+            <i class="fas fa-check-circle"></i> 88% Bengali tokens
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Method -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Our Approach</h2>
+
+    <div class="columns" style="margin-top: 2rem;">
+      <div class="column is-6">
+        <h3 class="title is-4">1. GANIT Dataset</h3>
+        <p>A rigorously-processed, difficulty-aware Bengali math dataset:</p>
+        <ul>
+          <li><strong>Quality Screening:</strong> Manual evaluation, >95% accuracy threshold</li>
+          <li><strong>Rule-based Filtering:</strong> Numerical solutions, >99% Bengali text</li>
+          <li><strong>Deduplication:</strong> Fuzzy matching + MinHash</li>
+          <li><strong>Decontamination:</strong> Against MGSM & MSVAMP</li>
+          <li><strong>Difficulty Tagging:</strong> Using pass@32 from Qwen3-32B</li>
+        </ul>
+
+        <div class="table-responsive">
+          <table class="comparison-table" style="margin-top: 1rem;">
+            <tr>
+              <th>Split</th>
+              <th>Examples</th>
+              <th>Purpose</th>
+            </tr>
+            <tr>
+              <td>GanitSFT</td>
+              <td>11,023</td>
+              <td>Instruction tuning</td>
+            </tr>
+            <tr>
+              <td>GanitRLVR</td>
+              <td>7,328</td>
+              <td>RL training (balanced)</td>
+            </tr>
+            <tr>
+              <td>GanitDEV</td>
+              <td>776</td>
+              <td>Evaluation</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="column is-6">
+        <h3 class="title is-4">2. Curriculum-GRPO</h3>
+        <p>A novel training recipe to tackle the cold-start problem:</p>
+
+        <div class="method-step">
+          <div class="step-number">1</div>
+          <div>
+            <strong>SFT Stage:</strong> Train on GANIT-SFT to ground reasoning in Bengali (not English)
+          </div>
+        </div>
+
+        <div class="method-step">
+          <div class="step-number">2</div>
+          <div>
+            <strong>Curriculum Sampling:</strong> Order training data by difficulty (easy → hard) to avoid zero-reward updates
+          </div>
+        </div>
+
+        <div class="method-step">
+          <div class="step-number">3</div>
+          <div>
+            <strong>Multi-component Rewards:</strong>
+            <ul style="margin-top: 0.5rem;">
+              <li>Format: Validates &lt;think&gt; and &lt;answer&gt; tags</li>
+              <li>Correctness: +2.0 Bengali, +1.0 English match</li>
+              <li>Bengali: Ensures >80% Bengali reasoning</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Method Figure -->
+    <div class="has-text-centered" style="margin-top: 2rem;">
+      <img src="static/images/method.png" alt="GANIT construction pipeline" style="max-width: 80%; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+      <p class="has-text-centered" style="margin-top: 0.5rem; color: #64748b;">
+        Figure: GANIT dataset construction pipeline. Starting from ~1.5M Bengali math problems, we apply multi-stage quality filtration, verification, deduplication, and decontamination.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Results -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Results</h2>
+
+    <div class="content">
+      <h3 class="title is-4">Main Results</h3>
+      <p>GanitLLM enables smaller models to match or exceed larger counterparts while reasoning natively in Bengali:</p>
+
+      <div class="table-responsive">
+        <table class="comparison-table">
+          <tr>
+            <th>Model</th>
+            <th>Bn-MGSM ↑</th>
+            <th>Bn-MSVAMP ↑</th>
+            <th>Words ↓</th>
+            <th>Bengali % ↑</th>
+          </tr>
+          <tr>
+            <td><a href="https://openai.com/index/gpt-4-1/" target="_blank">GPT-4.1</a></td>
+            <td>89.20</td>
+            <td>82.30</td>
+            <td>200</td>
+            <td>88.16%</td>
+          </tr>
+          <tr>
+            <td><a href="https://openai.com/index/gpt-4-1/" target="_blank">GPT-4.1-mini</a></td>
+            <td>87.20</td>
+            <td>78.60</td>
+            <td>232</td>
+            <td>88.18%</td>
+          </tr>
+          <tr>
+            <td><a href="https://huggingface.co/Qwen/Qwen3-32B" target="_blank">Qwen3-32B</a></td>
+            <td>85.60</td>
+            <td>76.10</td>
+            <td>712</td>
+            <td>21.08%</td>
+          </tr>
+          <tr>
+            <td><a href="https://huggingface.co/Qwen/Qwen3-14B" target="_blank">Qwen3-14B</a></td>
+            <td>83.60</td>
+            <td>75.80</td>
+            <td>767</td>
+            <td>17.87%</td>
+          </tr>
+          <tr>
+            <td><a href="https://huggingface.co/Qwen/Qwen3-8B" target="_blank">Qwen3-8B</a></td>
+            <td>69.20</td>
+            <td>52.60</td>
+            <td>977</td>
+            <td>19.26%</td>
+          </tr>
+          <tr style="background: #ecfdf5;">
+            <td><strong><a href="https://huggingface.co/Qwen/Qwen3-4B" target="_blank">Qwen3-4B</a></strong></td>
+            <td>69.20</td>
+            <td>70.50</td>
+            <td>943</td>
+            <td>14.79%</td>
+          </tr>
+          <tr style="background: #d1fae5;">
+            <td><strong><a href="https://huggingface.co/dipta007/GanitLLM-4B_SFT_CGRPO" target="_blank">GanitLLM-4B</a></strong> <span class="model-badge badge-green">Ours</span></td>
+            <td><strong>76.80</strong></td>
+            <td><strong>76.40</strong></td>
+            <td><strong>193</strong></td>
+            <td><strong>88.71%</strong></td>
+          </tr>
+          <tr style="background: #ecfdf5;">
+            <td><strong><a href="https://huggingface.co/Qwen/Qwen3-1.7B" target="_blank">Qwen3-1.7B</a></strong></td>
+            <td>15.20</td>
+            <td>14.10</td>
+            <td>1124</td>
+            <td>19.64%</td>
+          </tr>
+          <tr style="background: #d1fae5;">
+            <td><strong><a href="https://huggingface.co/dipta007/GanitLLM-1.7B_SFT_CGRPO" target="_blank">GanitLLM-1.7B</a></strong> <span class="model-badge badge-green">Ours</span></td>
+            <td><strong>52.80</strong></td>
+            <td><strong>66.80</strong></td>
+            <td><strong>210</strong></td>
+            <td><strong>87.80%</strong></td>
+          </tr>
+          <tr style="background: #ecfdf5;">
+            <td><strong><a href="https://huggingface.co/Qwen/Qwen3-0.6B" target="_blank">Qwen3-0.6B</a></strong></td>
+            <td>8.40</td>
+            <td>12.20</td>
+            <td>1265</td>
+            <td>12.43%</td>
+          </tr>
+          <tr style="background: #d1fae5;">
+            <td><strong><a href="https://huggingface.co/dipta007/GanitLLM-0.6B_SFT_CGRPO" target="_blank">GanitLLM-0.6B</a></strong> <span class="model-badge badge-green">Ours</span></td>
+            <td><strong>28.40</strong></td>
+            <td><strong>52.40</strong></td>
+            <td><strong>248</strong></td>
+            <td><strong>88.70%</strong></td>
+          </tr>
+        </table>
+      </div>
+
+      <h3 class="title is-4" style="margin-top: 2rem;">Ablation: Why Multi-stage Training?</h3>
+      <p>SFT grounds language, GRPO improves accuracy. Both are necessary:</p>
+
+      <div class="table-responsive">
+        <table class="comparison-table">
+          <tr>
+            <th>Configuration</th>
+            <th>Bn-MGSM</th>
+            <th>Bn-MSVAMP</th>
+            <th>Words</th>
+            <th>Bengali %</th>
+          </tr>
+          <tr>
+            <td><a href="https://huggingface.co/Qwen/Qwen3-4B" target="_blank">Qwen3-4B (base)</a></td>
+            <td>69.20</td>
+            <td>70.50</td>
+            <td>943</td>
+            <td>14.79%</td>
+          </tr>
+          <tr>
+            <td><a href="https://huggingface.co/dipta007/GanitLLM-4B_SFT" target="_blank">+ SFT only</a></td>
+            <td>74.00</td>
+            <td>74.60</td>
+            <td>184</td>
+            <td>86.65%</td>
+          </tr>
+          <tr>
+            <td><a href="https://huggingface.co/dipta007/GanitLLM-4B_CGRPO" target="_blank">+ CGRPO only</a></td>
+            <td><strong>82.40</strong></td>
+            <td><strong>78.50</strong></td>
+            <td>844</td>
+            <td>14.94%</td>
+          </tr>
+          <tr style="background: #d1fae5;">
+            <td><strong><a href="https://huggingface.co/dipta007/GanitLLM-4B_SFT_CGRPO" target="_blank">SFT + CGRPO (Ours)</a></strong></td>
+            <td>76.80</td>
+            <td>76.40</td>
+            <td><strong>193</strong></td>
+            <td><strong>88.71%</strong></td>
+          </tr>
+        </table>
+      </div>
+      <p style="margin-top: 0.5rem; color: #64748b;">
+        <i class="fas fa-info-circle"></i> CGRPO alone achieves highest accuracy but only 14.94% Bengali reasoning. Our multi-stage approach balances accuracy with interpretability.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Models & Dataset -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Models & Dataset</h2>
+
+    <div class="columns" style="margin-top: 2rem;">
+      <div class="column is-6">
+        <h3 class="title is-4">Pre-trained Models</h3>
+        <p>All models available on HuggingFace:</p>
+        <div class="table-responsive">
+          <table class="comparison-table">
+            <tr>
+              <th>Model</th>
+              <th>Params</th>
+              <th>Training</th>
+            </tr>
+            <tr>
+              <td><a href="https://huggingface.co/dipta007/GanitLLM-4B_SFT_CGRPO" target="_blank">GanitLLM-4B_SFT_CGRPO</a></td>
+              <td>4B</td>
+              <td>SFT + CGRPO</td>
+            </tr>
+            <tr>
+              <td><a href="https://huggingface.co/dipta007/GanitLLM-4B_SFT_GRPO" target="_blank">GanitLLM-4B_SFT_GRPO</a></td>
+              <td>4B</td>
+              <td>SFT + GRPO</td>
+            </tr>
+            <tr>
+              <td><a href="https://huggingface.co/dipta007/GanitLLM-1.7B_SFT_CGRPO" target="_blank">GanitLLM-1.7B_SFT_CGRPO</a></td>
+              <td>1.7B</td>
+              <td>SFT + CGRPO</td>
+            </tr>
+            <tr>
+              <td><a href="https://huggingface.co/dipta007/GanitLLM-1.7B_SFT_GRPO" target="_blank">GanitLLM-1.7B_SFT_GRPO</a></td>
+              <td>1.7B</td>
+              <td>SFT + GRPO</td>
+            </tr>
+            <tr>
+              <td><a href="https://huggingface.co/dipta007/GanitLLM-0.6B_SFT_CGRPO" target="_blank">GanitLLM-0.6B_SFT_CGRPO</a></td>
+              <td>0.6B</td>
+              <td>SFT + CGRPO</td>
+            </tr>
+            <tr>
+              <td><a href="https://huggingface.co/dipta007/GanitLLM-0.6B_SFT_GRPO" target="_blank">GanitLLM-0.6B_SFT_GRPO</a></td>
+              <td>0.6B</td>
+              <td>SFT + GRPO</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="column is-6">
+        <h3 class="title is-4">GANIT Dataset</h3>
+        <p>Difficulty-aware Bengali math dataset:</p>
+        <div class="highlight-box">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+            <div style="text-align: center;">
+              <div style="font-size: 1.5rem; font-weight: 700;">19K+</div>
+              <div style="font-size: 0.8rem; opacity: 0.9;">Total Examples</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 1.5rem; font-weight: 700;">4</div>
+              <div style="font-size: 0.8rem; opacity: 0.9;">Difficulty Levels</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 1.5rem; font-weight: 700;">3</div>
+              <div style="font-size: 0.8rem; opacity: 0.9;">Splits</div>
+            </div>
+          </div>
+          <a href="https://huggingface.co/datasets/dipta007/Ganit" target="_blank" style="display: block; background: white; color: #10b981; padding: 0.75rem; border-radius: 8px; text-align: center; font-weight: 600; text-decoration: none;">
+            <i class="fas fa-download"></i> Download Dataset
+          </a>
+        </div>
+
+        <h4 class="title is-5" style="margin-top: 1.5rem;">Difficulty Distribution</h4>
+        <div class="table-responsive">
+          <table class="comparison-table">
+            <tr>
+              <th>Difficulty</th>
+              <th>Criteria</th>
+              <th>GanitDEV</th>
+            </tr>
+            <tr>
+              <td>Easy</td>
+              <td>>75% LLMs correct</td>
+              <td>28.7%</td>
+            </tr>
+            <tr>
+              <td>Medium</td>
+              <td>50-75% correct</td>
+              <td>26.0%</td>
+            </tr>
+            <tr>
+              <td>Hard</td>
+              <td>25-50% correct</td>
+              <td>24.3%</td>
+            </tr>
+            <tr>
+              <td>Olympiad</td>
+              <td><25% correct</td>
+              <td>21.3%</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--BibTex citation -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <div class="bibtex-header">
+      <h2 class="title">BibTeX</h2>
+      <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+        <i class="fas fa-copy"></i>
+        <span class="copy-text">Copy</span>
+      </button>
+    </div>
+    <pre id="bibtex-code"><code>will be updated</code></pre>
+  </div>
+</section>
+<!--End BibTex citation -->
+
+
+<footer class="footer">
+<div class="container">
+  <div class="columns is-centered">
+    <div class="column is-8">
+      <div class="content">
+        <p>
+          This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>.
+          <br>
+          This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+</footer>
+
+</main>
+
+<!-- Default Statcounter code for GanitLLM
+https://dipta007.github.io/GanitLLM -->
+<script type="text/javascript">
+var sc_project=13197297;
+var sc_invisible=1;
+var sc_security="15f0071d";
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js" async></script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+href="https://statcounter.com/" target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/13197297/0/15f0071d/1/" alt="Web Analytics"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+
+</body>
+</html>
